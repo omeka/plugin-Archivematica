@@ -10,16 +10,3 @@
         ); ?>
     </div>
 </div>
-<div class="field">
-    <div class="two columns alpha">
-        <label for="include_items_without_files"><?php echo __('Include items without files'); ?></label>
-    </div>
-    <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __('Archivematica requires a corresponding content file for every entry in metadata.csv. If checked, generate a JSON metadata snapshot file for Omeka items without file/s to point to. If unchecked, skip items without file/s.'); ?></p>
-        <?php echo $this->formCheckbox(
-            'include_items_without_files',
-            true,
-            ['checked' => (bool) get_option('archivematica_include_items_without_files')]
-        ); ?>
-    </div>
-</div>

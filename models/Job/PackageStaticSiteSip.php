@@ -39,17 +39,16 @@ class Job_PackageStaticSiteSip extends Omeka_Job_AbstractJob
             }
 
             $sipName = sprintf('%s-AM_SIP', $staticSite->getName());
-            $unzippedDirectoryPath = sprintf('%s/%s', $sipsDirectoryPath, $staticSite->getName());
             $sipDirectoryPath = sprintf('%s/%s', $sipsDirectoryPath, $sipName);
 
-            $this->_shellExec(sprintf(
-                'unzip %s -d %s',
-                escapeshellarg($sourceZipPath),
-                escapeshellarg($sipsDirectoryPath)
-            ));
-            rename($unzippedDirectoryPath, $sipDirectoryPath);
+            mkdir(sprintf('%s/objects', $sipDirectoryPath), 0755, true);
+            mkdir(sprintf('%s/metadata', $sipDirectoryPath), 0755, true);
+            $objectFilename = sprintf('objects/%s.zip', $staticSite->getName());
+            if (!copy($sourceZipPath, sprintf('%s/%s', $sipDirectoryPath, $objectFilename))) {
+                throw new Exception(sprintf('Could not copy static site export zip into SIP: %s', $sourceZipPath));
+            }
 
-            $this->_writeMetadataCsv($sipDirectoryPath);
+            $this->_writeStaticSiteMetadataCsv($sipDirectoryPath, $objectFilename, $staticSite);
 
             $this->_shellExec(sprintf(
                 'cd %s && zip --recurse-paths %s %s',
@@ -78,8 +77,22 @@ class Job_PackageStaticSiteSip extends Omeka_Job_AbstractJob
         }
     }
 
+    // Write a single metadata.csv row describing the whole static site export
+    private function _writeStaticSiteMetadataCsv($sipDirectoryPath, $objectFilename, $staticSite)
+    {
+        $fp = fopen(sprintf('%s/metadata/metadata.csv', $sipDirectoryPath), 'w');
+        fputcsv($fp, ['filename', 'dc.title', 'dc.description', 'dc.identifier'], ',', '"', '');
+        fputcsv($fp, [
+            $objectFilename,
+            $this->_stripInvalidXmlChars((string) get_option('site_title')),
+            $this->_stripInvalidXmlChars((string) get_option('description')),
+            $this->_stripInvalidXmlChars((string) $staticSite->getDataValue('base_url')),
+        ], ',', '"', '');
+        fclose($fp);
+    }
+
     /**
-     * Write a SIP-shaped metadata.csv, one row per exported digital object.
+     * Write a SIP metadata.csv, one row per exported digital object.
      *
      * Walks every exported item; an item with attached files gets one row
      * per file (columns from that file's own element_texts.json). When the 

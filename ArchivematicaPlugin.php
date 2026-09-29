@@ -39,7 +39,6 @@ class ArchivematicaPlugin extends Omeka_Plugin_AbstractPlugin
         $sql = "DROP TABLE IF EXISTS `$db->ArchivematicaSip`";
         $db->query($sql);
         delete_option('archivematica_sips_directory_path');
-        delete_option('archivematica_include_items_without_files');
     }
 
     public function hookInitialize()
@@ -66,7 +65,6 @@ class ArchivematicaPlugin extends Omeka_Plugin_AbstractPlugin
             throw new Omeka_Plugin_Installer_Exception('Invalid SIPs directory path');
         }
         set_option('archivematica_sips_directory_path', $path);
-        set_option('archivematica_include_items_without_files', $_POST['include_items_without_files']);
     }
 
     public function filterAdminNavigationMain($nav)
