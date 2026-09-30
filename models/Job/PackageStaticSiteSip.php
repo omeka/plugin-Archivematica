@@ -40,6 +40,15 @@ class Job_PackageStaticSiteSip extends Omeka_Job_AbstractJob
 
             $sipName = sprintf('%s-AM_SIP', $staticSite->getName());
             $sipDirectoryPath = sprintf('%s/%s', $sipsDirectoryPath, $sipName);
+            $sipZipPath = sprintf('%s/%s.zip', $sipsDirectoryPath, $sipName);
+
+            // Remove any previous SIP for this export, including leftovers from a failed run
+            if (is_file($sipZipPath)) {
+                unlink($sipZipPath);
+            }
+            if (is_dir($sipDirectoryPath)) {
+                $this->_shellExec(sprintf('rm -r %s', escapeshellarg($sipDirectoryPath)));
+            }
 
             mkdir(sprintf('%s/objects', $sipDirectoryPath), 0755, true);
             mkdir(sprintf('%s/metadata', $sipDirectoryPath), 0755, true);
@@ -50,11 +59,11 @@ class Job_PackageStaticSiteSip extends Omeka_Job_AbstractJob
 
             $this->_writeStaticSiteMetadataCsv($sipDirectoryPath, $objectFilename, $staticSite);
 
+            // Archivematica expects objects/ and metadata/ at the zip root, not under a wrapping directory
             $this->_shellExec(sprintf(
-                'cd %s && zip --recurse-paths %s %s',
-                escapeshellarg($sipsDirectoryPath),
-                escapeshellarg(sprintf('%s.zip', $sipName)),
-                escapeshellarg($sipName)
+                'cd %s && zip --recurse-paths %s objects metadata',
+                escapeshellarg($sipDirectoryPath),
+                escapeshellarg($sipZipPath)
             ));
             $this->_shellExec(sprintf('rm -r %s', escapeshellarg($sipDirectoryPath)));
 

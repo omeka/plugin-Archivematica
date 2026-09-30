@@ -33,11 +33,15 @@ class Archivematica_IndexController extends Omeka_Controller_AbstractActionContr
         }
 
         $staticSiteId = (int) $this->getRequest()->getParam('id');
+        // Recreating a SIP replaces the previous record; the job replaces its files
         $existing = $this->_helper->db->getTable('ArchivematicaSip')->findBySource('static_site', $staticSiteId);
         if ($existing) {
-            $this->_helper->flashMessenger(__('This export has already been packaged or is in progress.'), 'error');
-            $this->_helper->redirector('create-static-site');
-            return;
+            if (in_array($existing->getStatus(), [Process::STATUS_STARTING, Process::STATUS_IN_PROGRESS])) {
+                $this->_helper->flashMessenger(__('A SIP for this export is already being created.'), 'error');
+                $this->_helper->redirector('create-static-site');
+                return;
+            }
+            $existing->delete();
         }
 
         $sip = new ArchivematicaSip;

@@ -30,10 +30,10 @@
                 <?php endif; ?>
             </td>
             <td>
-                <?php if (!$row['sip_status']): ?>
+                <?php if (!in_array($row['sip_status'], [Process::STATUS_STARTING, Process::STATUS_IN_PROGRESS])): ?>
                 <form method="post" action="<?php echo url(['controller' => 'index', 'action' => 'package', 'id' => $row['static_site_id']]); ?>">
                     <?php echo $csrf; ?>
-                    <input type="submit" value="<?php echo __('Package as SIP'); ?>">
+                    <input type="submit" value="<?php echo __('Create SIP'); ?>">
                 </form>
                 <?php endif; ?>
             </td>
