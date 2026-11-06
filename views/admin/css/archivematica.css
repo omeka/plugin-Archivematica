@@ -1,0 +1,29 @@
+#content .archivematica-create-sip {
+    margin-bottom: 1.5em;
+}
+
+/* Search filters, result count and pagination on one row above the item table */
+.archivematica-results-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 30px;
+    margin-bottom: 20px;
+}
+
+.archivematica-results-summary p {
+    margin: 0;
+}
+
+.archivematica-results-summary #item-filters li {
+    margin-bottom: 0;
+}
+
+.archivematica-results-summary nav {
+    margin-left: auto;
+}
+
+.archivematica-results-summary .pagination {
+    float: none;
+    margin: 0;
+}

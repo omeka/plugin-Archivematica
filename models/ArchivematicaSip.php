@@ -8,6 +8,7 @@ class ArchivematicaSip extends Omeka_Record_AbstractRecord implements Zend_Acl_R
     public $status;
     public $sip_name;
     public $error_message;
+    public $data;
 
     protected function _initializeMixins()
     {
@@ -25,8 +26,30 @@ class ArchivematicaSip extends Omeka_Record_AbstractRecord implements Zend_Acl_R
         return $this->status;
     }
 
+    public function setData(array $data)
+    {
+        $this->data = json_encode($data);
+    }
+
+    public function getData()
+    {
+        return json_decode($this->data, true) ?: [];
+    }
+
     public function getResourceId()
     {
         return 'Archivematica_Sip';
+    }
+
+    protected function afterDelete()
+    {
+        $sipsDirectoryPath = get_option('archivematica_sips_directory_path');
+        if (!$this->sip_name || !$sipsDirectoryPath) {
+            return;
+        }
+        $sipZipPath = sprintf('%s/%s.zip', $sipsDirectoryPath, $this->sip_name);
+        if (is_file($sipZipPath)) {
+            unlink($sipZipPath);
+        }
     }
 }

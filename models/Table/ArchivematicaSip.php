@@ -18,6 +18,7 @@ class Table_ArchivematicaSip extends Omeka_Db_Table
             sip.sip_name AS sip_name,
             sip.error_message AS error_message,
             sip.added AS added,
+            sip.data AS data,
             static_site.name AS static_site_name
         FROM `$db->ArchivematicaSip` AS sip
         LEFT JOIN `$db->StaticSite` AS static_site

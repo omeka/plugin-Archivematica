@@ -27,6 +27,7 @@ class ArchivematicaPlugin extends Omeka_Plugin_AbstractPlugin
             `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
             `sip_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
             `error_message` text COLLATE utf8_unicode_ci,
+            `data` text COLLATE utf8_unicode_ci,
             PRIMARY KEY (`id`),
             KEY `source` (`source_type`, `source_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";

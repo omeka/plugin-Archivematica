@@ -8,7 +8,7 @@
         <a href="<?php echo html_escape(url(['controller' => 'index', 'action' => 'create-static-site'])); ?>" class="button"><?php echo __('Static Site Export'); ?></a>
     </li>
     <li>
-        <span class="button disabled" title="<?php echo html_escape(__('Coming soon')); ?>"><?php echo __('Item(s)'); ?></span>
+        <a href="<?php echo html_escape(url(['controller' => 'index', 'action' => 'create-items'])); ?>" class="button"><?php echo __('Item(s)'); ?></a>
     </li>
 </ul>
 
