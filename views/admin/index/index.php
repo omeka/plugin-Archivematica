@@ -1,8 +1,9 @@
 <?php queue_css_file('archivematica'); ?>
 <?php echo head(['title' => __('Archivematica'), 'bodyclass' => 'archivematica browse']); ?>
+<?php echo $this->partial('archivematica-navigation.php'); ?>
 <?php echo flash(); ?>
 
-<a href="<?php echo html_escape(url(['controller' => 'index', 'action' => 'create'])); ?>" class="archivematica-create-sip add full-width-mobile button green"><?php echo __('Create SIP'); ?></a>
+<a href="<?php echo html_escape(url(['controller' => 'index', 'action' => 'create'])); ?>" class="archivematica-add add full-width-mobile button green"><?php echo __('Create SIP'); ?></a>
 
 <?php if (empty($sips)): ?>
 <p><?php echo __('No SIPs have been created yet.'); ?></p>

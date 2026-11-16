@@ -1,5 +1,11 @@
-#content .archivematica-create-sip {
+#content .archivematica-add {
     margin-bottom: 1.5em;
+}
+
+/* Long unbroken error messages and filenames wrap instead of widening the table */
+.archivematica td .explanation {
+    max-width: 20em;
+    overflow-wrap: anywhere;
 }
 
 /* Search filters, result count and pagination on one row above the item table */
